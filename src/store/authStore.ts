@@ -5,7 +5,9 @@ export interface User {
   id: string
   email: string
   name: string
+  first_name?: string
   studentId: string
+  avatar_url?: string
 }
 
 interface AuthState {
@@ -14,6 +16,7 @@ interface AuthState {
   loading: boolean
   setUser: (user: User | null) => void
   login: (email: string, password: string) => Promise<void>
+  loginWithGoogle: () => Promise<void>
   logout: () => void
   checkAuth: () => void
 }
@@ -58,8 +61,25 @@ export const useAuthStore = create<AuthState>()(
           throw new Error('Invalid email or password')
         }
         
-        const { password: _, ...user } = demoUser
+        const { password: _, ...userWithoutPassword } = demoUser
+        // Extract first name from full name
+        const firstName = userWithoutPassword.name.split(' ')[0]
+        const user = { ...userWithoutPassword, first_name: firstName }
         set({ user, isAuthenticated: true })
+      },
+      
+      loginWithGoogle: async () => {
+        // For demo purposes, simulate Google login
+        // In production, this would use Supabase OAuth
+        const googleUser = {
+          id: 'google-' + Date.now(),
+          email: 'user@gmail.com',
+          name: 'Google User',
+          first_name: 'Google',
+          studentId: 'STU' + Math.floor(Math.random() * 1000),
+          avatar_url: 'https://ui-avatars.com/api/?name=Google+User'
+        }
+        set({ user: googleUser, isAuthenticated: true })
       },
       
       logout: () => {
