@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Student Portal</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <span class="icon">📊</span>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">💳</span>
+                    Financials
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">🎓</span>
+                    Academics
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">🏠</span>
+                    Accommodation
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📄</span>
+                    Documents
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">✓</span>
+                    Clearance
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <span class="icon">🔒</span>
+                    Reset Password
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">🚪</span>
+                    Sign Out
+                </a>
+                <p class="copyright">© 2025 Multimedia University</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-btn">☰ AI</button>
+                    <h1 class="page-title">Redesign University Student Portal</h1>
+                </div>
+                <div class="top-bar-right">
+                    <button class="icon-btn">👥</button>
+                    <button class="share-btn">Share</button>
+                </div>
+            </header>
+
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <h2>Welcome back, Christopher</h2>
+                <p class="subtitle">Here's what's happening with your academic journey</p>
+            </section>
+
+            <!-- Critical Announcements -->
+            <div class="announcements-card">
+                <div class="announcements-header">
+                    <div class="announcements-title">
+                        <span class="icon-circle orange">📢</span>
+                        <span>Critical Announcements</span>
+                        <span class="badge red">2 New</span>
+                    </div>
+                </div>
+                <div class="announcement-item">
+                    <div class="announcement-content">
+                        <div class="announcement-title-row">
+                            <strong>Exam Schedule Published</strong>
+                            <span class="badge urgent">Urgent</span>
+                        </div>
+                        <p>Final examination timetable for Semester 2, 2025 is now available. Check your student portal for details.</p>
+                        <span class="time-text">Today</span>
+                    </div>
+                    <button class="arrow-btn">›</button>
+                </div>
+                <div class="announcement-item">
+                    <div class="announcement-content">
+                        <div class="announcement-title-row">
+                            <strong>Library Hours Extended</strong>
+                            <span class="badge info">Info</span>
+                        </div>
+                        <p>Main library will be open 24/7 during examination period starting October 24th.</p>
+                        <span class="time-text">Yesterday</span>
+                    </div>
+                    <button class="arrow-btn">›</button>
+                </div>
+                <a href="#" class="view-all-link">View all announcements</a>
+            </div>
+
+            <!-- Dashboard Cards Grid -->
+            <div class="dashboard-grid">
+                <!-- Academic Performance Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="icon-circle orange">🎓</span>
+                        <div>
+                            <h3>Academic Performance</h3>
+                            <p class="card-subtitle">Current semester overview</p>
+                        </div>
+                        <button class="external-link-btn">↗</button>
+                    </div>
+                    <div class="gpa-section">
+                        <div class="gpa-header">
+                            <span>Current GPA</span>
+                            <span class="trend-icon">📈</span>
+                        </div>
+                        <div class="gpa-value">
+                            <span class="gpa-number">3.67</span>
+                            <span class="gpa-max">/ 4.00</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 91.75%"></div>
+                        </div>
+                        <p class="percentile-text">92nd percentile in your cohort</p>
+                    </div>
+                    <div class="deadlines-section">
+                        <h4>📅 Upcoming Deadlines</h4>
+                        <div class="deadline-item">
+                            <div>
+                                <strong>Project Phase 2</strong>
+                                <p class="deadline-course">Software Engineering</p>
+                            </div>
+                            <span class="deadline-badge urgent">5d</span>
+                        </div>
+                        <div class="deadline-item">
+                            <div>
+                                <strong>Final Exam</strong>
+                                <p class="deadline-course">Database Systems</p>
+                            </div>
+                            <span class="deadline-badge">8d</span>
+                        </div>
+                        <div class="deadline-item">
+                            <div>
+                                <strong>Portfolio Submission</strong>
+                                <p class="deadline-course">Web Development</p>
+                            </div>
+                            <span class="deadline-badge">12d</span>
+                        </div>
+                    </div>
+                    <div class="card-footer-tabs">
+                        <button class="tab-btn active">View Grades</button>
+                        <button class="tab-btn">Course Materials</button>
+                    </div>
+                </div>
+
+                <!-- Fee Payment Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="icon">💳</span>
+                        <div>
+                            <h3>Fee Payment</h3>
+                            <p class="card-subtitle">Financial summary</p>
+                        </div>
+                    </div>
+                    <div class="fee-credit-box">
+                        <div class="fee-credit-header">
+                            <span class="check-icon">✓</span>
+                            <span>Fee Credit</span>
+                        </div>
+                        <div class="fee-amount">Ksh. 18,360.00</div>
+                        <p class="fee-note">You have a credit balance</p>
+                    </div>
+                    <div class="fee-summary">
+                        <div class="fee-row">
+                            <span>Total Billed</span>
+                            <span>Ksh. 203,600.00</span>
+                        </div>
+                        <div class="fee-row">
+                            <span>Total Paid</span>
+                            <span class="green-text">Ksh. 221,960.00</span>
+                        </div>
+                    </div>
+                    <button class="paid-btn">💳 Already Paid</button>
+                    <div class="card-footer-tabs">
+                        <button class="tab-btn active">📄 Statements</button>
+                        <button class="tab-btn">🧾 Receipts</button>
+                    </div>
+                </div>
+
+                <!-- Calendar Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="icon">📅</span>
+                        <div>
+                            <h3>Calendar</h3>
+                            <p class="card-subtitle">Upcoming events & deadlines</p>
+                        </div>
+                    </div>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="calendar-nav">‹</button>
+                            <span class="calendar-month">October 2025</span>
+                            <button class="calendar-nav">›</button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Su</div>
+                            <div class="calendar-day-header">Mo</div>
+                            <div class="calendar-day-header">Tu</div>
+                            <div class="calendar-day-header">We</div>
+                            <div class="calendar-day-header">Th</div>
+                            <div class="calendar-day-header">Fr</div>
+                            <div class="calendar-day-header">Sa</div>
+                            <div class="calendar-day inactive">28</div>
+                            <div class="calendar-day inactive">29</div>
+                            <div class="calendar-day inactive">30</div>
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day">14</div>
+                            <div class="calendar-day">15</div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                            <div class="calendar-day">18</div>
+                            <div class="calendar-day">19</div>
+                            <div class="calendar-day today">20</div>
+                            <div class="calendar-day">21</div>
+                            <div class="calendar-day">22</div>
+                            <div class="calendar-day">23</div>
+                            <div class="calendar-day">24</div>
+                            <div class="calendar-day">25</div>
+                            <div class="calendar-day">26</div>
+                            <div class="calendar-day">27</div>
+                            <div class="calendar-day">28</div>
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day">30</div>
+                            <div class="calendar-day">31</div>
+                            <div class="calendar-day inactive">1</div>
+                        </div>
+                    </div>
+                    <div class="upcoming-events">
+                        <h4>Upcoming Events</h4>
+                        <div class="event-item">
+                            <span class="event-dot red"></span>
+                            <div>
+                                <strong>Project Phase 2 Due</strong>
+                                <p class="event-date">Oct 25</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-dot orange"></span>
+                            <div>
+                                <strong>Database Final Exam</strong>
+                                <p class="event-date">Oct 28</p>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <span class="event-dot blue"></span>
+                            <div>
+                                <strong>Portfolio Submission</strong>
+                                <p class="event-date">Nov 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Stream -->
+            <div class="activity-stream-card">
+                <div class="activity-header">
+                    <div>
+                        <h3>📊 Activity Stream</h3>
+                        <p class="card-subtitle">Recent and upcoming events</p>
+                    </div>
+                    <span class="items-count">8 items</span>
+                </div>
+                <div class="activity-item time-marker">
+                    <span>5 days ago</span>
+                </div>
+                <div class="activity-item highlight">
+                    <span class="activity-icon">📅</span>
+                    <div class="activity-content">
+                        <strong>Exam Schedule Released</strong>
+                        <p>Database Systems Final - Oct 28, 2025</p>
+                        <span class="time-text">1 week ago</span>
+                    </div>
+                    <button class="action-btn">Action</button>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-icon">🕐</span>
+                    <div class="activity-content">
+                        <strong>Class Rescheduled</strong>
+                        <p>Web Development Lab moved to Friday 2PM</p>
+                        <span class="time-text">1 week ago</span>
+                    </div>
+                </div>
+                <div class="activity-item success">
+                    <span class="activity-icon">💰</span>
+                    <div class="activity-content">
+                        <strong>Scholarship Applied</strong>
+                        <p>Government scholarship of Ksh. 100,000 credited</p>
+                        <span class="time-text">2 weeks ago</span>
+                    </div>
+                </div>
+                <div class="activity-item success">
+                    <span class="activity-icon">🎓</span>
+                    <div class="activity-content">
+                        <strong>Course Registration Complete</strong>
+                        <p>5 courses registered for this semester</p>
+                        <span class="time-text">3 weeks ago</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h3>⚡ Quick Actions</h3>
+                    <p class="card-subtitle">Frequent tasks</p>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn">
+                            <span class="action-icon orange">⬇</span>
+                            <span>Download Transcript</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="action-icon green">⬆</span>
+                            <span>Submit Assignment</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="action-icon purple">📄</span>
+                            <span>View Statement</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="action-icon orange">💬</span>
+                            <span>Contact Support</span>
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="action-icon gray">⚙</span>
+                            <span>Account Settings</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Information -->
+                <div class="card">
+                    <h3>👤 Profile Information</h3>
+                    <div class="profile-section">
+                        <div class="profile-avatar">KCM</div>
+                        <h4 class="profile-name">Kimanja Christopher Madedo</h4>
+                        <p class="profile-id">SST-261-155/2023</p>
+                        <div class="profile-details">
+                            <div class="profile-detail-item">
+                                <span class="detail-icon">#</span>
+                                <div>
+                                    <p class="detail-label">ID/Passport</p>
+                                    <p class="detail-value">42144740</p>
+                                </div>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="detail-icon">📅</span>
+                                <div>
+                                    <p class="detail-label">Date of Birth</p>
+                                    <p class="detail-value">6/2/2004 (21 years)</p>
+                                </div>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span class="detail-icon">✉</span>
+                                <div>
+                                    <p class="detail-label">Email</p>
+                                    <p class="detail-value">madedochristopher97@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- AI Chatbot -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <span class="chatbot-icon">🤖</span>
+                <span>AI Assistant</span>
+            </div>
+            <button class="chatbot-minimize" id="minimizeChat">−</button>
+        </div>
+        <div class="chatbot-messages" id="chatMessages"></div>
+        <div class="chatbot-input-container">
+            <input type="text" id="chatInput" placeholder="Ask me anything..." />
+            <button id="sendMessage">Send</button>
+        </div>
+    </div>
+    
+    <button class="chatbot-toggle" id="chatToggle">
+        <span class="chat-icon">💬</span>
+        <span class="chat-text">AI Assistant</span>
+    </button>
+
+    <script src="script.js"></script>
+    <script src="demo-chatbot.js"></script>
+</body>
+</html>
