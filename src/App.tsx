@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
-import { MobileHeader } from './components/MobileHeader';
+import { TopNavbar } from './components/TopNavbar';
+// import { MobileHeader } from './components/MobileHeader'; // Keeping commented or removing
 import { DashboardPage } from './components/pages/DashboardPage';
 import { FeeStatementPage } from './components/pages/FeeStatementPage';
 import { ReceiptsPage } from './components/pages/ReceiptsPage';
@@ -12,6 +13,7 @@ import { LecturersEvaluationPage } from './components/pages/LecturersEvaluationP
 import { AccommodationPage } from './components/pages/AccommodationPage';
 import { DocumentsPage } from './components/pages/DocumentsPage';
 import { ResetPasswordPage } from './components/pages/ResetPasswordPage';
+import { SupportPage } from './components/pages/SupportPage';
 import Login from './pages/Login';
 import { useAuthStore } from './store/authStore';
 
@@ -27,7 +29,7 @@ export default function App() {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
-        return <DashboardPage />;
+        return <DashboardPage onNavigate={setCurrentPage} />;
       case 'fee-statement':
         return <FeeStatementPage />;
       case 'receipts':
@@ -48,8 +50,10 @@ export default function App() {
         return <ClearanceRequisitionPage />;
       case 'reset-password':
         return <ResetPasswordPage />;
+      case 'support':
+        return <SupportPage />;
       default:
-        return <DashboardPage />;
+        return <DashboardPage onNavigate={setCurrentPage} />;
     }
   };
 
@@ -60,21 +64,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100">
-      {/* Mobile Header */}
-      <MobileHeader onMenuClick={() => setSidebarOpen(true)} />
 
       <div className="flex">
         {/* Sidebar */}
-        <Sidebar 
-          open={sidebarOpen} 
+        <Sidebar
+          open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
           currentPage={currentPage}
           onNavigate={setCurrentPage}
         />
 
         {/* Main Content */}
-        <main className="flex-1 lg:ml-64 pt-16 lg:pt-0 w-full overflow-x-hidden">
-          <div className="max-w-7xl mx-auto p-4 lg:p-8 w-full">
+        <main className="flex-1 lg:ml-64 pt-6 lg:pt-0 w-full overflow-x-hidden relative">
+
+          {/* Top Floating Navbar (Replaces Mobile Header for structure, but we might keep MobileHeader logic inside it or separate) */}
+          <TopNavbar onMenuClick={() => setSidebarOpen(true)} title={currentPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} />
+
+          <div className="max-w-7xl mx-auto px-4 lg:px-8 pb-8 w-full">
             {renderPage()}
           </div>
         </main>

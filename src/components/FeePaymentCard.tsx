@@ -3,7 +3,11 @@ import { Wallet, CheckCircle, AlertCircle, FileText, Receipt, CreditCard } from 
 import { Button } from './ui/button';
 import { cn } from './ui/utils';
 
-export function FeePaymentCard() {
+interface FeePaymentCardProps {
+  onNavigate?: (page: string) => void;
+}
+
+export function FeePaymentCard({ onNavigate }: FeePaymentCardProps) {
   const totalBilled = 203600.00;
   const totalPaid = 221960.00;
   const balance = totalBilled - totalPaid;
@@ -25,11 +29,11 @@ export function FeePaymentCard() {
 
       <CardContent className="space-y-4">
         {/* Balance Display */}
-        <div 
+        <div
           className={cn(
             "rounded-lg p-4 border-2 shadow-sm",
-            hasCredit 
-              ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-300" 
+            hasCredit
+              ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-300"
               : "bg-gradient-to-br from-red-50 to-rose-50 border-red-300"
           )}
         >
@@ -71,11 +75,11 @@ export function FeePaymentCard() {
 
         {/* Quick Actions */}
         <div className="space-y-2">
-          <Button 
+          <Button
             className={cn(
               "w-full transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2",
-              hasCredit 
-                ? "bg-green-600 hover:bg-green-700 focus:ring-green-500" 
+              hasCredit
+                ? "bg-green-600 hover:bg-green-700 focus:ring-green-500"
                 : "bg-orange-600 hover:bg-orange-700 focus:ring-orange-500"
             )}
             size="sm"
@@ -83,20 +87,22 @@ export function FeePaymentCard() {
             <CreditCard className="w-4 h-4 mr-2" />
             {hasCredit ? "Already Paid" : "Make Payment"}
           </Button>
-          
+
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="flex-1 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+              onClick={() => onNavigate?.('fee-statement')}
             >
               <FileText className="w-4 h-4 mr-2" />
               Statements
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="flex-1 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+              onClick={() => onNavigate?.('receipts')}
             >
               <Receipt className="w-4 h-4 mr-2" />
               Receipts

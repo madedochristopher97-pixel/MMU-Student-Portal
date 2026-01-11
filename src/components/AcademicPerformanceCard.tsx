@@ -4,7 +4,11 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Progress } from './ui/progress';
 
-export function AcademicPerformanceCard() {
+interface AcademicPerformanceCardProps {
+  onNavigate?: (page: string) => void;
+}
+
+export function AcademicPerformanceCard({ onNavigate }: AcademicPerformanceCardProps) {
   const upcomingDeadlines = [
     { course: 'Software Engineering', assignment: 'Project Phase 2', date: '2025-10-25', daysLeft: 5 },
     { course: 'Database Systems', assignment: 'Final Exam', date: '2025-10-28', daysLeft: 8 },
@@ -22,9 +26,9 @@ export function AcademicPerformanceCard() {
             </CardTitle>
             <CardDescription>Current semester overview</CardDescription>
           </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             className="h-8 text-orange-600 hover:bg-orange-50 transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
           >
             <ExternalLink className="w-4 h-4" />
@@ -55,7 +59,7 @@ export function AcademicPerformanceCard() {
           </div>
           <div className="space-y-2">
             {upcomingDeadlines.map((deadline, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all cursor-pointer hover:shadow-sm"
               >
@@ -63,7 +67,7 @@ export function AcademicPerformanceCard() {
                   <p className="text-sm text-slate-900 truncate">{deadline.assignment}</p>
                   <p className="text-xs text-slate-600">{deadline.course}</p>
                 </div>
-                <Badge 
+                <Badge
                   variant={deadline.daysLeft <= 5 ? "destructive" : "secondary"}
                   className={`ml-2 shrink-0 ${deadline.daysLeft <= 5 ? 'bg-red-100 text-red-700 border-red-200 hover:bg-red-100' : 'bg-blue-100 text-blue-700 border-blue-200 hover:bg-blue-100'}`}
                 >
@@ -76,17 +80,19 @@ export function AcademicPerformanceCard() {
 
         {/* Quick Actions */}
         <div className="flex gap-2 pt-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="flex-1 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            onClick={() => onNavigate?.('provisional-results')}
           >
             View Grades
           </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             className="flex-1 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+            onClick={() => onNavigate?.('course-registration')}
           >
             Course Materials
           </Button>

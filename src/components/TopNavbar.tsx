@@ -1,0 +1,63 @@
+import { Bell, Search, Menu } from 'lucide-react';
+import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Input } from './ui/input';
+import { useAuthStore } from '../store/authStore';
+
+interface TopNavbarProps {
+  onMenuClick: () => void;
+  title?: string;
+}
+
+export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) {
+  const { user } = useAuthStore();
+  const userName = user?.name || "Christopher Made"; // Fallback or store value
+  const userInitials = userName.split(' ').map(n => n[0]).join('');
+
+  return (
+    <div className="sticky top-4 z-40 mx-4 lg:mx-8 mb-6">
+      <div className="bg-white/80 backdrop-blur-md border border-white/20 shadow-lg rounded-full px-6 py-3 flex items-center justify-between">
+        
+        {/* Left: Menu & Title */}
+        <div className="flex items-center gap-4">
+          <Button variant="ghost" size="icon" className="lg:hidden" onClick={onMenuClick}>
+            <Menu className="w-5 h-5 text-slate-600" />
+          </Button>
+          <h1 className="text-lg font-semibold text-slate-800 hidden md:block">{title}</h1>
+          <span className="text-lg font-semibold text-slate-800 md:hidden">MMU</span>
+        </div>
+
+        {/* Center: Search (Optional, visually nice) */}
+        <div className="hidden md:flex items-center max-w-md w-full mx-4">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input 
+              placeholder="Search units, fees, results..." 
+              className="pl-10 rounded-full bg-slate-100 border-none focus-visible:ring-offset-0 focus-visible:ring-orange-500/20" 
+            />
+          </div>
+        </div>
+
+        {/* Right: Actions & Profile */}
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="rounded-full text-slate-500 hover:text-orange-600 hover:bg-orange-50">
+            <Bell className="w-5 h-5" />
+          </Button>
+
+          <div className="flex items-center gap-3 pl-3 border-l border-slate-200">
+             <div className="hidden sm:block text-right">
+                <p className="text-sm font-medium text-slate-900 leading-none">{userName}</p>
+                <p className="text-xs text-slate-500 mt-1">Student</p>
+             </div>
+            <Avatar className="w-9 h-9 border-2 border-white ring-2 ring-orange-100 cursor-pointer transition-transform hover:scale-105">
+              <AvatarImage src="" />
+              <AvatarFallback className="bg-orange-600 text-white text-xs">
+                {userInitials}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

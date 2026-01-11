@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Star } from 'lucide-react';
+import { Star, Search, Filter } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
@@ -11,14 +12,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { Badge } from '../ui/badge';
 
-// Sample lecturers data
+// Comprehensive lecturers data from prompt
 const lecturersData = [
-  { id: 1, name: 'Dr. Jane Mwangi', unit: 'COM 201 - Digital Media' },
-  { id: 2, name: 'Prof. John Kamau', unit: 'COM 202 - Public Relations' },
-  { id: 3, name: 'Dr. Sarah Omondi', unit: 'JRN 201 - Broadcast Journalism' },
-  { id: 4, name: 'Mr. Peter Wanjiru', unit: 'ADV 201 - Advertising Principles' },
-  { id: 5, name: 'Dr. Mary Njeri', unit: 'COM 203 - Communication Research' },
+  // Faculty of Computing
+  { id: 1, name: 'Dr. Silas Kamau', unit: 'Introduction to Programming', faculty: 'Computing & IT', code: 'CIT-101' },
+  { id: 2, name: 'Prof. Jane Mutua', unit: 'Database Management Systems', faculty: 'Computing & IT', code: 'CIT-102' },
+  { id: 3, name: 'Mr. Kevin Omollo', unit: 'Data Communication & Networking', faculty: 'Computing & IT', code: 'CIT-103' },
+  // Faculty of Engineering
+  { id: 4, name: 'Dr. Anthony Mwangi', unit: 'Engineering Mathematics I', faculty: 'Engineering & Tech', code: 'ENG-201' },
+  { id: 5, name: 'Eng. Sarah Teresia', unit: 'Fluid Mechanics', faculty: 'Engineering & Tech', code: 'ENG-202' },
+  { id: 6, name: 'Prof. David Omondi', unit: 'Circuit Theory', faculty: 'Engineering & Tech', code: 'ENG-203' },
+  // Faculty of Media
+  { id: 7, name: 'Ms. Brenda Wanja', unit: 'Digital Photography & Editing', faculty: 'Media & Comm', code: 'MED-301' },
+  { id: 8, name: 'Mr. Robert Gichuru', unit: 'Mass Media Law & Ethics', faculty: 'Media & Comm', code: 'MED-302' },
+  { id: 9, name: 'Dr. Emily Nekesa', unit: 'Public Relations Strategy', faculty: 'Media & Comm', code: 'MED-303' },
+  // Faculty of Science
+  { id: 10, name: 'Dr. Peter Karanja', unit: 'Organic Chemistry', faculty: 'Science & Tech', code: 'SCI-401' },
+  { id: 11, name: 'Prof. Alice Wambui', unit: 'Microbiology', faculty: 'Science & Tech', code: 'SCI-402' },
+  { id: 12, name: 'Mr. James Lekolool', unit: 'General Physics II', faculty: 'Science & Tech', code: 'SCI-403' },
+  // Faculty of Social Science
+  { id: 13, name: 'Dr. Mercy Chepngetich', unit: 'Development Studies', faculty: 'Social Science', code: 'SST-501' },
+  { id: 14, name: 'Mr. Victor Otieno', unit: 'Introduction to Psychology', faculty: 'Social Science', code: 'SST-502' },
+  { id: 15, name: 'Ms. Faith Kyalo', unit: 'Social Research Methods', faculty: 'Social Science', code: 'SST-503' },
 ];
 
 const evaluationCriteria = [
@@ -31,9 +48,18 @@ const evaluationCriteria = [
 ];
 
 export function LecturersEvaluationPage() {
-  const [selectedLecturer, setSelectedLecturer] = useState('');
+  const [selectedLecturerId, setSelectedLecturerId] = useState<string>('');
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [comments, setComments] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredLecturers = lecturersData.filter(l =>
+    l.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    l.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    l.faculty.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectedLecturer = lecturersData.find(l => l.id.toString() === selectedLecturerId);
 
   const handleRating = (criterionId: string, rating: number) => {
     setRatings(prev => ({ ...prev, [criterionId]: rating }));
@@ -42,7 +68,7 @@ export function LecturersEvaluationPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedLecturer) {
+    if (!selectedLecturerId) {
       alert('Please select a lecturer');
       return;
     }
@@ -53,10 +79,10 @@ export function LecturersEvaluationPage() {
       return;
     }
 
-    alert('Evaluation submitted successfully! Thank you for your feedback.');
-    
+    alert(`Evaluation submitted for ${selectedLecturer?.name}! Thank you for your feedback.`);
+
     // Reset form
-    setSelectedLecturer('');
+    setSelectedLecturerId('');
     setRatings({});
     setComments('');
   };
@@ -72,11 +98,10 @@ export function LecturersEvaluationPage() {
             className="focus:outline-none transition-transform hover:scale-110"
           >
             <Star
-              className={`w-6 h-6 ${
-                star <= currentRating
+              className={`w-6 h-6 ${star <= currentRating
                   ? 'fill-orange-500 text-orange-500'
-                  : 'text-slate-300'
-              }`}
+                  : 'text-slate-200'
+                }`}
             />
           </button>
         ))}
@@ -87,98 +112,127 @@ export function LecturersEvaluationPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-slate-900 mb-2">Lecturers Evaluation</h1>
-        <p className="text-slate-600">Provide feedback on your lecturers to help improve teaching quality</p>
+      <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 p-6 rounded-lg shadow-sm">
+        <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Lecturers Evaluation</h1>
+        <p className="text-lg text-slate-700">Evaluate your lecturers to help improve academic quality.</p>
       </div>
 
-      {/* Evaluation Form */}
-      <Card className="bg-white border-slate-200 shadow-lg overflow-hidden">
-        <div className="bg-orange-50 px-6 py-3 border-b border-slate-200">
-          <h3 className="text-slate-900">Lecturer Evaluation Form</h3>
-        </div>
-
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Lecturer Selection */}
-          <div className="space-y-2">
-            <Label htmlFor="lecturer">Select Lecturer to Evaluate *</Label>
-            <Select value={selectedLecturer} onValueChange={setSelectedLecturer}>
-              <SelectTrigger id="lecturer" className="bg-slate-50">
-                <SelectValue placeholder="Choose a lecturer" />
-              </SelectTrigger>
-              <SelectContent>
-                {lecturersData.map((lecturer) => (
-                  <SelectItem key={lecturer.id} value={lecturer.id.toString()}>
-                    {lecturer.name} - {lecturer.unit}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-slate-500 mt-1">
-              Only lecturers associated with your current semester's registered units will appear.
-            </p>
-          </div>
-
-          {/* Rating Criteria */}
-          {selectedLecturer && (
-            <div className="space-y-6">
-              <div className="border-t border-slate-200 pt-6">
-                <h4 className="text-slate-900 mb-4">Rate the following criteria (1-5 stars)</h4>
-                <div className="space-y-6">
-                  {evaluationCriteria.map((criterion) => (
-                    <div key={criterion.id} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-slate-50 rounded-lg">
-                      <div className="flex-1">
-                        <p className="text-slate-900">{criterion.label}</p>
-                        <p className="text-sm text-slate-600">{criterion.description}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <RatingStars 
-                          criterionId={criterion.id} 
-                          currentRating={ratings[criterion.id] || 0} 
-                        />
-                        <span className="text-sm text-slate-600 min-w-[60px]">
-                          {ratings[criterion.id] ? `${ratings[criterion.id]}/5` : 'Not rated'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Comments Section */}
-              <div className="space-y-2">
-                <Label htmlFor="comments">Additional Comments (Optional)</Label>
-                <Textarea
-                  id="comments"
-                  placeholder="Share any additional feedback or suggestions..."
-                  value={comments}
-                  onChange={(e) => setComments(e.target.value)}
-                  className="bg-slate-50 min-h-[120px]"
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column: Lecturer List */}
+        <div className="lg:col-span-1 space-y-4">
+          <Card className="bg-white border-slate-200 shadow-md flex flex-col h-[600px]">
+            <div className="p-4 border-b border-slate-200 bg-slate-50">
+              <h3 className="font-semibold text-slate-800 mb-2">Select Lecturer</h3>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input
+                  placeholder="Search..."
+                  className="pl-9 bg-white"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-
-              {/* Submit Button */}
-              <Button 
-                type="submit" 
-                className="w-full bg-orange-600 hover:bg-orange-700"
-              >
-                Submit Evaluation
-              </Button>
             </div>
-          )}
-        </form>
-      </Card>
+            <div className="flex-1 overflow-y-auto p-2 space-y-2">
+              {filteredLecturers.map((lecturer) => (
+                <div
+                  key={lecturer.id}
+                  onClick={() => setSelectedLecturerId(lecturer.id.toString())}
+                  className={`p-3 rounded-lg cursor-pointer border transition-all ${selectedLecturerId === lecturer.id.toString()
+                      ? 'bg-orange-50 border-orange-200 shadow-sm'
+                      : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
+                    }`}
+                >
+                  <h4 className={`font-semibold text-sm ${selectedLecturerId === lecturer.id.toString() ? 'text-orange-700' : 'text-slate-800'}`}>
+                    {lecturer.name}
+                  </h4>
+                  <p className="text-xs text-slate-500 mb-1">{lecturer.unit}</p>
+                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5">
+                    {lecturer.faculty.split(' ').slice(0, 1)}...
+                  </Badge>
+                </div>
+              ))}
+              {filteredLecturers.length === 0 && (
+                <p className="text-center text-slate-500 p-4 text-sm">No lecturers found.</p>
+              )}
+            </div>
+          </Card>
+        </div>
 
-      {/* Information Card */}
-      <Card className="bg-blue-50 border-blue-200 p-6">
-        <h4 className="text-blue-900 mb-2">About Lecturer Evaluations</h4>
-        <ul className="space-y-2 text-blue-800 text-sm">
-          <li>• Your feedback is anonymous and confidential</li>
-          <li>• Evaluations help lecturers improve their teaching methods</li>
-          <li>• Be honest and constructive in your feedback</li>
-          <li>• You can evaluate each lecturer once per semester</li>
-        </ul>
-      </Card>
+        {/* Right Column: Evaluation Form */}
+        <div className="lg:col-span-2">
+          <Card className="bg-white border-slate-200 shadow-lg min-h-[600px]">
+            {selectedLecturer ? (
+              <>
+                <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-6 border-b border-slate-200">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-900 mb-1">{selectedLecturer.name}</h2>
+                      <h3 className="text-lg text-slate-700 font-medium flex items-center gap-2">
+                        <span className="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-sm font-bold font-mono">{selectedLecturer.code}</span>
+                        {selectedLecturer.unit}
+                      </h3>
+                    </div>
+                    <Badge className="bg-slate-800">{selectedLecturer.faculty}</Badge>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="p-6 space-y-8">
+                  <div className="space-y-6">
+                    <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
+                    <div className="grid grid-cols-1 gap-4">
+                      {evaluationCriteria.map((criterion) => (
+                        <div key={criterion.id} className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                              <p className="font-semibold text-slate-900">{criterion.label}</p>
+                              <p className="text-sm text-slate-500">{criterion.description}</p>
+                            </div>
+                            <div className="flex items-center gap-3 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100">
+                              <RatingStars
+                                criterionId={criterion.id}
+                                currentRating={ratings[criterion.id] || 0}
+                              />
+                              <span className="text-sm font-bold text-slate-700 min-w-[24px] text-center">
+                                {ratings[criterion.id] || '-'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label htmlFor="comments" className="text-base font-semibold text-slate-800">Additional Comments</Label>
+                    <Textarea
+                      id="comments"
+                      placeholder="What did this lecturer do well? What could be improved?"
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      className="min-h-[100px] border-slate-300 focus:border-orange-500 focus:ring-orange-500"
+                    />
+                  </div>
+
+                  <div className="flex justify-end pt-4">
+                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8">
+                      Submit Evaluation
+                    </Button>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full p-8 text-center text-slate-500">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                  <Filter className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-700 mb-2">No Lecturer Selected</h3>
+                <p className="max-w-md">Please select a lecturer from the list on the left to begin the evaluation process.</p>
+              </div>
+            )}
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

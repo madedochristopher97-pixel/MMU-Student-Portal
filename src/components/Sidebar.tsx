@@ -1,4 +1,4 @@
-import { X, LayoutDashboard, Wallet, GraduationCap, Home, FileText, ClipboardCheck, Lock, LogOut, ChevronDown, ChevronRight } from 'lucide-react';
+import { X, LayoutDashboard, Wallet, GraduationCap, Home, FileText, ClipboardCheck, Lock, LogOut, ChevronDown, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from './ui/utils';
 import { useState } from 'react';
 
@@ -11,9 +11,9 @@ interface SidebarProps {
 
 const navigationItems = [
   { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', subItems: [] },
-  { 
-    id: 'financials', 
-    icon: Wallet, 
+  {
+    id: 'financials',
+    icon: Wallet,
     label: 'Financials',
     subItems: [
       { id: 'fee-statement', label: 'Fee Statement' },
@@ -21,9 +21,9 @@ const navigationItems = [
       { id: 'fee-structure', label: 'Fee Structure' },
     ]
   },
-  { 
-    id: 'academics', 
-    icon: GraduationCap, 
+  {
+    id: 'academics',
+    icon: GraduationCap,
     label: 'Academics',
     subItems: [
       { id: 'course-registration', label: 'Course Registration' },
@@ -34,6 +34,7 @@ const navigationItems = [
   { id: 'accommodation', icon: Home, label: 'Accommodation', subItems: [] },
   { id: 'documents', icon: FileText, label: 'Documents', subItems: [] },
   { id: 'clearance', icon: ClipboardCheck, label: 'Clearance Form', subItems: [] },
+  { id: 'support', icon: HelpCircle, label: 'Help & Support', subItems: [] },
 ];
 
 const secondaryItems = [
@@ -45,7 +46,7 @@ export function Sidebar({ open, onClose, currentPage, onNavigate }: SidebarProps
   const [expandedItems, setExpandedItems] = useState<string[]>(['financials', 'academics']);
 
   const toggleExpanded = (id: string) => {
-    setExpandedItems(prev => 
+    setExpandedItems(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
@@ -67,7 +68,7 @@ export function Sidebar({ open, onClose, currentPage, onNavigate }: SidebarProps
     <>
       {/* Mobile Overlay */}
       {open && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={onClose}
         />
@@ -84,7 +85,7 @@ export function Sidebar({ open, onClose, currentPage, onNavigate }: SidebarProps
         {/* Header */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
           <h2 className="text-orange-600">Student Portal</h2>
-          <button 
+          <button
             onClick={onClose}
             className="lg:hidden p-2 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
             aria-label="Close sidebar"
