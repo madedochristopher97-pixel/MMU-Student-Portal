@@ -19,32 +19,30 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
         <ProfileCard />
       </div>
 
-      {/* Critical Announcements - Full Width */}
+      {/* Primary: Fee Payment / Financial Summary (top priority) */}
+      <div className="mb-6">
+        <FeePaymentCard onNavigate={onNavigate} />
+      </div>
+
+      {/* Academic Performance (with shortcuts) */}
+      <div className="mb-6">
+        <AcademicPerformanceCard onNavigate={onNavigate} />
+      </div>
+
+      {/* Critical Announcements */}
       <div className="mb-6">
         <AnnouncementsCard />
       </div>
 
-      {/* Main Dashboard Grid */}
+      {/* Main Dashboard Grid (activity and calendar) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column - Main Content */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Top Cards Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <AcademicPerformanceCard onNavigate={onNavigate} />
-            <FeePaymentCard onNavigate={onNavigate} />
-          </div>
-
-          {/* Activity Stream */}
           <ActivityStream />
         </div>
 
-        {/* Right Column - Sidebar Widgets */}
         <div className="lg:col-span-4 space-y-6">
-          {/* Calendar Widget */}
           <CalendarWidget />
-
-          {/* Quick Actions */}
-          <QuickActionsCard />
+          <QuickActionsCard onNavigate={onNavigate} />
         </div>
       </div>
     </>

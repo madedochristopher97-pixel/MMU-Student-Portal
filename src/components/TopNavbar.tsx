@@ -1,8 +1,9 @@
-import { Bell, Search, Menu } from 'lucide-react';
+import { Bell, Search, Menu, Camera } from 'lucide-react';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Input } from './ui/input';
 import { useAuthStore } from '../store/authStore';
+import { useRef, useState, useEffect } from 'react';
 
 interface TopNavbarProps {
   onMenuClick: () => void;
@@ -10,9 +11,60 @@ interface TopNavbarProps {
 }
 
 export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) {
-  const { user } = useAuthStore();
-  const userName = user?.name || "Christopher Made"; // Fallback or store value
+  const auth = useAuthStore();
+  const { user } = auth;
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  const userName = user?.name || (() => {
+    try {
+      const raw = localStorage.getItem('mmu_profile');
+      if (raw) return JSON.parse(raw).name || 'Christopher Madido';
+    } catch (e) {}
+    return 'Christopher Madido';
+  })();
+
   const userInitials = userName.split(' ').map(n => n[0]).join('');
+
+  useEffect(() => {
+    // try to load avatar from auth store or localStorage
+    if (user?.avatar_url) setAvatarSrc(user.avatar_url as string);
+    else {
+      try {
+        const raw = localStorage.getItem('mmu_profile');
+        if (raw) {
+          const saved = JSON.parse(raw);
+          if (saved.image) setAvatarSrc(saved.image as string);
+        }
+      } catch (e) {}
+    }
+  }, [user]);
+
+  const handleAvatarClick = () => {
+    fileRef.current?.click();
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const data = reader.result as string;
+      setAvatarSrc(data);
+      try {
+        const raw = localStorage.getItem('mmu_profile');
+        const obj = raw ? JSON.parse(raw) : {};
+        obj.image = data;
+        localStorage.setItem('mmu_profile', JSON.stringify(obj));
+      } catch (e) {}
+      // update auth store
+      try {
+        const existing = auth.user || { id: 'local', email: '', name: userName, studentId: '' };
+        auth.setUser({ ...existing, avatar_url: data });
+      } catch (e) {}
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="sticky top-4 z-40 mx-4 lg:mx-8 mb-6">
@@ -49,12 +101,15 @@ export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) 
                 <p className="text-sm font-medium text-slate-900 leading-none">{userName}</p>
                 <p className="text-xs text-slate-500 mt-1">Student</p>
              </div>
-            <Avatar className="w-9 h-9 border-2 border-white ring-2 ring-orange-100 cursor-pointer transition-transform hover:scale-105">
-              <AvatarImage src="" />
-              <AvatarFallback className="bg-orange-600 text-white text-xs">
-                {userInitials}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+              <Avatar onClick={handleAvatarClick} title="Edit image" className="w-9 h-9 border-2 border-white ring-2 ring-orange-100 cursor-pointer transition-transform hover:scale-105">
+                <AvatarImage src={avatarSrc || ''} />
+                <AvatarFallback className="bg-orange-600 text-white text-xs">
+                  {userInitials}
+                </AvatarFallback>
+              </Avatar>
+            </div>
           </div>
         </div>
       </div>

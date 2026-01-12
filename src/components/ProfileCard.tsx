@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { User, Mail, Phone, MapPin, Camera, Save, X, Edit2, CheckCircle2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -7,14 +7,17 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
+import { useAuthStore } from '../store/authStore';
 
 export function ProfileCard() {
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // State for student info
+  const auth = useAuthStore();
+
   const [info, setInfo] = useState({
-    name: 'Christopher Made',
+    name: 'Christopher Madido',
     admissionNo: 'SST-251-1**/2024',
     status: 'Active',
     email: 'christopher.made@student.mmu.ac.ke',
@@ -27,6 +30,19 @@ export function ProfileCard() {
 
   const handleSave = () => {
     setInfo(editForm);
+    // persist to localStorage
+    try {
+      localStorage.setItem('mmu_profile', JSON.stringify(editForm));
+    } catch (e) {
+      console.error('Failed to save profile to localStorage', e);
+    }
+
+    // update auth store (name + avatar)
+    try {
+      const existing = auth.user || { id: 'local', email: editForm.email, name: editForm.name, studentId: editForm.admissionNo };
+      auth.setUser({ ...existing, name: editForm.name, avatar_url: editForm.image });
+    } catch (e) {}
+
     setIsEditing(false);
     toast.success("Profile updated successfully!");
   };
@@ -47,8 +63,27 @@ export function ProfileCard() {
     }
   };
 
+  useEffect(() => {
+    // load saved profile from localStorage if present
+    try {
+      const raw = localStorage.getItem('mmu_profile');
+      if (raw) {
+        const saved = JSON.parse(raw);
+        setInfo((prev) => ({ ...prev, ...saved }));
+        setEditForm((prev) => ({ ...prev, ...saved }));
+        // also update auth store
+        if (saved.name || saved.image) {
+          const existing = auth.user || { id: 'local', email: saved.email || prev.email, name: saved.name || prev.name, studentId: saved.admissionNo || prev.admissionNo };
+          auth.setUser({ ...existing, name: saved.name || existing.name, avatar_url: saved.image || existing.avatar_url });
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
   return (
-    <Card className="border-none shadow-md overflow-hidden bg-white/50 backdrop-blur-sm">
+    <Card className="bg-white border-slate-200 shadow-md overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col md:flex-row">
 
@@ -65,7 +100,7 @@ export function ProfileCard() {
               {isEditing && (
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="absolute bottom-4 right-0 p-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 shadow-lg transition-all"
+                  className="absolute top-2 right-2 p-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 shadow-lg transition-all"
                 >
                   <Camera className="w-4 h-4" />
                 </button>
@@ -81,15 +116,24 @@ export function ProfileCard() {
 
             <div className="text-center">
               {isEditing ? (
-                <Input
-                  value={editForm.name}
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="text-center font-bold text-lg mb-2 h-9 bg-white"
-                />
+                <>
+                  <Input
+                    value={editForm.name}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    className="text-center font-bold text-lg mb-2 h-9 bg-white"
+                  />
+                  <Input
+                    value={editForm.admissionNo}
+                    onChange={(e) => setEditForm({ ...editForm, admissionNo: e.target.value })}
+                    className="text-center text-sm mb-2 h-9 bg-white"
+                  />
+                </>
               ) : (
-                <h2 className="text-xl font-bold text-slate-900 mb-1">{info.name}</h2>
+                <>
+                  <h2 className="text-xl font-bold text-slate-900 mb-1">{info.name}</h2>
+                  <p className="text-sm text-slate-500 font-mono mb-2">{info.admissionNo}</p>
+                </>
               )}
-              <p className="text-sm text-slate-500 font-mono mb-2">{info.admissionNo}</p>
               <Badge variant={info.status === 'Active' ? 'default' : 'secondary'} className={`${info.status === 'Active' ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-slate-100 text-slate-700'}`}>
                 <span className={`w-2 h-2 rounded-full mr-1.5 ${info.status === 'Active' ? 'bg-green-500' : 'bg-slate-500'}`}></span>
                 {info.status}

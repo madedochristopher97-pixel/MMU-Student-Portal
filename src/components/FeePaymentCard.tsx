@@ -14,7 +14,7 @@ export function FeePaymentCard({ onNavigate }: FeePaymentCardProps) {
   const hasCredit = balance < 0;
 
   return (
-    <Card className="border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+    <Card className="bg-white border-slate-200 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div>
