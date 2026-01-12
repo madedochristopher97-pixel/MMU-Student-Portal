@@ -224,3 +224,56 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Ensure buttons have comfortable padding */
 .btn-comfort { padding-left: 1rem; padding-right: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+/* Glass card for evaluation criteria */
+.glass-card {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+/* selected lecturer glow */
+.lecturer-item-active {
+  box-shadow: 0 6px 30px rgba(232,93,4,0.12);
+  border: 1px solid rgba(234,88,12,0.25);
+}
+
+/* Stars */
+.star {
+  cursor: pointer;
+  transition: transform 120ms ease, color 120ms ease, filter 120ms ease;
+}
+.star:hover { transform: scale(1.12); }
+.star-on {
+  background: linear-gradient(90deg,#FFD54A,#F6C02D);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 6px 10px rgba(246,192,45,0.18));
+}
+
+/* particle burst */
+.particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle at 30% 30%, #fff8d6, #ffd54a);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.6);
+  animation: particle-move 550ms ease-out forwards;
+}
+@keyframes particle-move {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); }
+}
+
+/* submit success check animation */
+.check-wrap { display:inline-block; }
+.check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 600ms ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+/* Responsive stepper styles */
+@media (max-width: 768px) {
+  .eval-grid { grid-template-columns: 1fr !important; }
+  .lecturer-list { max-height: 220px !important; }
+}

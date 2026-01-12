@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Star, Search, Filter } from 'lucide-react';
 import { Card } from '../ui/card';
 import { Label } from '../ui/label';
@@ -51,6 +51,8 @@ export function LecturersEvaluationPage() {
   const [selectedLecturerId, setSelectedLecturerId] = useState<string>('');
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [comments, setComments] = useState('');
+  const [submitted, setSubmitted] = useState(false)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredLecturers = lecturersData.filter(l =>
@@ -61,8 +63,9 @@ export function LecturersEvaluationPage() {
 
   const selectedLecturer = lecturersData.find(l => l.id.toString() === selectedLecturerId);
 
-  const handleRating = (criterionId: string, rating: number) => {
+  const handleRating = (criterionId: string, rating: number, ev?: React.MouseEvent) => {
     setRatings(prev => ({ ...prev, [criterionId]: rating }));
+    if (ev && containerRef.current) triggerParticle(ev.nativeEvent as MouseEvent, containerRef.current)
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,13 +82,34 @@ export function LecturersEvaluationPage() {
       return;
     }
 
-    alert(`Evaluation submitted for ${selectedLecturer?.name}! Thank you for your feedback.`);
-
-    // Reset form
-    setSelectedLecturerId('');
-    setRatings({});
-    setComments('');
+    setSubmitted(true)
+    setTimeout(() => {
+      alert(`Evaluation submitted for ${selectedLecturer?.name}! Thank you for your feedback.`);
+      setSubmitted(false)
+      // Reset form
+      setSelectedLecturerId('');
+      setRatings({});
+      setComments('');
+    }, 700)
   };
+
+  function triggerParticle(e: MouseEvent, container: HTMLElement) {
+    const rect = container.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    for (let i = 0; i < 10; i++) {
+      const p = document.createElement('div')
+      p.className = 'particle'
+      const dx = (Math.random() - 0.5) * 180 + 'px'
+      const dy = (Math.random() - 0.5) * 180 + 'px'
+      p.style.left = `${x}px`
+      p.style.top = `${y}px`
+      p.style.setProperty('--dx', dx)
+      p.style.setProperty('--dy', dy)
+      container.appendChild(p)
+      setTimeout(() => { p.remove() }, 700)
+    }
+  }
 
   const RatingStars = ({ criterionId, currentRating }: { criterionId: string; currentRating: number }) => {
     return (
@@ -94,12 +118,12 @@ export function LecturersEvaluationPage() {
           <button
             key={star}
             type="button"
-            onClick={() => handleRating(criterionId, star)}
+            onClick={(e) => handleRating(criterionId, star, e)}
             className="focus:outline-none star-btn"
             aria-label={`Rate ${star} stars`}
           >
             <Star
-              className={`w-8 h-8 ${star <= currentRating ? 'fill-yellow-400 text-yellow-400' : 'text-slate-200'}`}
+              className={`w-8 h-8 star ${star <= currentRating ? 'star-on' : 'text-slate-200'}`}
             />
           </button>
         ))}
@@ -108,7 +132,7 @@ export function LecturersEvaluationPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" ref={containerRef}>
       {/* Page Header */}
       <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-l-4 border-orange-500 p-6 rounded-lg shadow-sm">
         <h1 className="text-3xl font-extrabold text-slate-900 mb-2">Lecturers Evaluation</h1>
@@ -214,7 +238,16 @@ export function LecturersEvaluationPage() {
 
                   <div className="flex justify-end pt-4">
                     <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 btn-comfort w-full sm:w-auto">
-                      Submit Evaluation
+                      {submitted ? (
+                        <span className="flex items-center gap-2">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path className="check" d="M20 6L9 17L4 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          Submitted
+                        </span>
+                      ) : (
+                        'Submit Evaluation'
+                      )}
                     </Button>
                   </div>
                 </form>
