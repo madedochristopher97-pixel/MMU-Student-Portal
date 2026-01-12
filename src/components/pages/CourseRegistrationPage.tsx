@@ -1,4 +1,5 @@
 import { Card } from '../ui/card';
+import { useState, useEffect } from 'react';
 import { Badge } from '../ui/badge';
 import {
   Table,
@@ -55,6 +56,24 @@ const registeredUnits = [
 
 export function CourseRegistrationPage() {
   const totalCreditHours = registeredUnits.reduce((sum, unit) => sum + unit.creditHours, 0);
+  const faculties = ['Faculty of Computing & Information Technology', 'Faculty of Engineering & Technology', 'Faculty of Media & Communication', 'Faculty of Science & Technology', 'Faculty of Social Science and Technology'];
+  const computingUnits = [
+    'Distributed Systems',
+    'Artificial Intelligence',
+    'Advanced Web Programming',
+    'Network Security',
+    'Human-Computer Interaction',
+    'Database Management Systems',
+    'Software Engineering',
+    'Mobile App Development'
+  ];
+  const [selectedFaculty, setSelectedFaculty] = useState<string>(faculties[0]);
+  const [availableUnits, setAvailableUnits] = useState<string[]>(computingUnits);
+  const [chosenUnits, setChosenUnits] = useState<string[]>([]);
+
+  const toggleUnit = (u: string) => {
+    setChosenUnits(prev => prev.includes(u) ? prev.filter(x => x !== u) : [...prev, u]);
+  };
 
   return (
     <div className="space-y-6">
@@ -63,6 +82,30 @@ export function CourseRegistrationPage() {
         <h1 className="text-slate-900 mb-2">Course Registration List</h1>
         <p className="text-slate-600">View your registered units and course details</p>
       </div>
+
+      {/* Faculty Selector + Units */}
+      <Card className="bg-white border-slate-200 shadow-lg p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <Label className="text-sm font-semibold">Select Faculty</Label>
+            <select value={selectedFaculty} onChange={(e) => setSelectedFaculty(e.target.value)} className="mt-2 w-full rounded-md border p-2">
+              {faculties.map(f => <option key={f} value={f}>{f}</option>)}
+            </select>
+          </div>
+
+          <div className="md:col-span-2">
+            <Label className="text-sm font-semibold">Available Units</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {availableUnits.map((u) => (
+                <button key={u} onClick={() => toggleUnit(u)} className={`text-left p-3 rounded-lg border ${chosenUnits.includes(u) ? 'bg-orange-50 border-orange-200' : 'bg-white border-slate-200'}`}>
+                  <div className="font-medium">{u}</div>
+                  <div className="text-xs text-slate-500">3 Credit Hours</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Card>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

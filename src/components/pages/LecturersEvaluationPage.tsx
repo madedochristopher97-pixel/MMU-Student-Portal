@@ -89,19 +89,17 @@ export function LecturersEvaluationPage() {
 
   const RatingStars = ({ criterionId, currentRating }: { criterionId: string; currentRating: number }) => {
     return (
-      <div className="flex gap-1">
+      <div className="flex gap-2">
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
             type="button"
             onClick={() => handleRating(criterionId, star)}
-            className="focus:outline-none transition-transform hover:scale-110"
+            className="focus:outline-none star-btn"
+            aria-label={`Rate ${star} stars`}
           >
             <Star
-              className={`w-6 h-6 ${star <= currentRating
-                  ? 'fill-orange-500 text-orange-500'
-                  : 'text-slate-200'
-                }`}
+              className={`w-8 h-8 ${star <= currentRating ? 'fill-yellow-400 text-yellow-400' : 'text-slate-200'}`}
             />
           </button>
         ))}
@@ -133,12 +131,12 @@ export function LecturersEvaluationPage() {
                 />
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-2 space-y-2">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3">
               {filteredLecturers.map((lecturer) => (
                 <div
                   key={lecturer.id}
                   onClick={() => setSelectedLecturerId(lecturer.id.toString())}
-                  className={`p-3 rounded-lg cursor-pointer border transition-all ${selectedLecturerId === lecturer.id.toString()
+                  className={`p-4 rounded-lg cursor-pointer border transition-all ${selectedLecturerId === lecturer.id.toString()
                       ? 'bg-orange-50 border-orange-200 shadow-sm'
                       : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
                     }`}
@@ -178,22 +176,22 @@ export function LecturersEvaluationPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-8">
-                  <div className="space-y-6">
+                    <div className="space-y-6">
                     <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
                     <div className="grid grid-cols-1 gap-4">
                       {evaluationCriteria.map((criterion) => (
-                        <div key={criterion.id} className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <div key={criterion.id} className="bg-slate-50 p-6 rounded-xl border border-slate-100">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                              <p className="font-semibold text-slate-900">{criterion.label}</p>
+                              <p className="font-semibold text-slate-900 mb-1">{criterion.label}</p>
                               <p className="text-sm text-slate-500">{criterion.description}</p>
                             </div>
-                            <div className="flex items-center gap-3 bg-white px-3 py-1.5 rounded-full shadow-sm border border-slate-100">
+                            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
                               <RatingStars
                                 criterionId={criterion.id}
                                 currentRating={ratings[criterion.id] || 0}
                               />
-                              <span className="text-sm font-bold text-slate-700 min-w-[24px] text-center">
+                              <span className="text-sm font-bold text-slate-700 min-w-[32px] text-center">
                                 {ratings[criterion.id] || '-'}
                               </span>
                             </div>
@@ -215,7 +213,7 @@ export function LecturersEvaluationPage() {
                   </div>
 
                   <div className="flex justify-end pt-4">
-                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8">
+                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 btn-comfort w-full sm:w-auto">
                       Submit Evaluation
                     </Button>
                   </div>

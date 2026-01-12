@@ -202,3 +202,25 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
+
+/* Card hover lift for a premium feel */
+[data-slot="card"] {
+  transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease, opacity 300ms ease;
+  will-change: transform, opacity;
+}
+
+[data-slot="card"]:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(16,24,40,0.08);
+}
+
+/* Scroll reveal */
+.reveal-hidden { opacity: 0; transform: translateY(12px); }
+.reveal-visible { opacity: 1; transform: translateY(0); transition: opacity 420ms ease, transform 420ms cubic-bezier(.2,.9,.2,1); }
+
+/* Star hover effect */
+.star-btn { transition: transform 120ms ease, filter 120ms ease; }
+.star-btn:hover { transform: scale(1.08); filter: drop-shadow(0 6px 14px rgba(250,204,21,0.18)); }
+
+/* Ensure buttons have comfortable padding */
+.btn-comfort { padding-left: 1rem; padding-right: 1rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }

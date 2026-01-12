@@ -22,6 +22,17 @@ export function QuickActionsCard({ onNavigate }: QuickActionsCardProps) {
   const [showSubmit, setShowSubmit] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const [title, setTitle] = useState('');
+  const [lecturerId, setLecturerId] = useState<string>('');
+
+  const lecturers = [
+    { id: '1', name: 'Dr. Silas Kamau' },
+    { id: '2', name: 'Prof. Jane Mutua' },
+    { id: '3', name: 'Mr. Kevin Omollo' },
+  ];
+
+  const lecturerEmail = (name: string) => {
+    return name.toLowerCase().replace(/[^a-z\s]/g, '').trim().replace(/\s+/g, '.') + '@mmu.ac.ke';
+  };
 
   const handleSubmitAssignment = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -30,17 +41,23 @@ export function QuickActionsCard({ onNavigate }: QuickActionsCardProps) {
       toast.error('Please choose a file to submit');
       return;
     }
+    if (!lecturerId) {
+      toast.error('Please select a lecturer');
+      return;
+    }
     const reader = new FileReader();
     reader.onloadend = () => {
       try {
         const data = reader.result as string;
-        const entry = { id: Date.now(), title: title || file.name, fileName: file.name, data, submittedAt: new Date().toISOString() };
+        const selected = lecturers.find(l => l.id === lecturerId);
+        const entry = { id: Date.now(), title: title || file.name, fileName: file.name, data, submittedAt: new Date().toISOString(), lecturer: selected?.name || '', lecturerEmail: selected ? lecturerEmail(selected.name) : '' };
         const existing = JSON.parse(localStorage.getItem('mmu_assignments') || '[]');
         existing.push(entry);
         localStorage.setItem('mmu_assignments', JSON.stringify(existing));
         toast.success('Assignment submitted (saved locally)');
         setShowSubmit(false);
         setTitle('');
+        setLecturerId('');
       } catch (err) {
         toast.error('Failed to save assignment');
       }
@@ -88,9 +105,23 @@ export function QuickActionsCard({ onNavigate }: QuickActionsCardProps) {
 
           <form onSubmit={(e) => { e.preventDefault(); handleSubmitAssignment(); }} className="space-y-4">
             <Input placeholder="Assignment title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <input ref={fileRef} type="file" accept="*" />
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700">Select Lecturer</label>
+              <select className="w-full rounded-md border p-2" value={lecturerId} onChange={(e) => setLecturerId(e.target.value)}>
+                <option value="">Choose lecturer...</option>
+                {lecturers.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+              </select>
+              {lecturerId && (
+                <div className="text-sm text-slate-600">Routing to: <strong>{lecturerEmail(lecturers.find(l => l.id === lecturerId)!.name)}</strong></div>
+              )}
+            </div>
+
+            <div>
+              <input ref={fileRef} type="file" accept="*" />
+            </div>
             <DialogFooter>
-              <Button type="submit" className="bg-orange-600 text-white">Submit</Button>
+              <Button type="submit" className="bg-orange-600 text-white btn-comfort">Submit</Button>
               <Button variant="ghost" onClick={() => setShowSubmit(false)}>Cancel</Button>
             </DialogFooter>
           </form>

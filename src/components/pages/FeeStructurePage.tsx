@@ -66,7 +66,7 @@ const facultyData = {
 
 export function FeeStructurePage() {
   const [selectedFaculty, setSelectedFaculty] = useState<string>('Faculty of Computing & Information Technology');
-  const [selectedSemester, setSelectedSemester] = useState('Sem 1.1');
+  const [selectedSemester, setSelectedSemester] = useState('Y1S1');
 
   const currentFacultyData = facultyData[selectedFaculty as keyof typeof facultyData];
 
@@ -112,11 +112,14 @@ export function FeeStructurePage() {
                 <SelectValue placeholder="Select Semester" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Sem 1.1">Year 1 - Semester 1</SelectItem>
-                <SelectItem value="Sem 1.2">Year 1 - Semester 2</SelectItem>
-                <SelectItem value="Sem 2.1">Year 2 - Semester 1</SelectItem>
-                <SelectItem value="Sem 2.2">Year 2 - Semester 2</SelectItem>
-                {/* Add more as needed */}
+                <SelectItem value="Y1S1">Year 1 - Semester 1</SelectItem>
+                <SelectItem value="Y1S2">Year 1 - Semester 2</SelectItem>
+                <SelectItem value="Y2S1">Year 2 - Semester 1</SelectItem>
+                <SelectItem value="Y2S2">Year 2 - Semester 2</SelectItem>
+                <SelectItem value="Y3S1">Year 3 - Semester 1</SelectItem>
+                <SelectItem value="Y3S2">Year 3 - Semester 2</SelectItem>
+                <SelectItem value="Y4S1">Year 4 - Semester 1</SelectItem>
+                <SelectItem value="Y4S2">Year 4 - Semester 2</SelectItem>
               </SelectContent>
             </Select>
           </div>
