@@ -77,7 +77,7 @@ export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) 
           </Button>
           <h1 className="text-lg font-semibold text-slate-800 hidden md:block">{title}</h1>
           <div className="md:hidden">
-            <img src="/mmu-logo.png" alt="MMU" className="h-6 object-contain" />
+            <img src="/mmu.logo.png" alt="MMU" className="h-6 w-auto object-contain" />
           </div>
         </div>
 
