@@ -124,6 +124,12 @@ export function LecturersEvaluationPage() {
     }
   }
 
+  function getInitials(name?: string) {
+    if (!name) return 'NA'
+    const parts = name.split(' ')
+    return (parts[0]?.[0] || '') + (parts[1]?.[0] || '')
+  }
+
   const RatingStars = ({ criterionId, currentRating }: { criterionId: string; currentRating: number }) => {
     return (
       <div className="flex gap-2">
@@ -252,28 +258,53 @@ export function LecturersEvaluationPage() {
                   <div className="flex justify-end pt-4">
                     <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 submit-eval-btn w-full sm:w-auto">
                       {submitted ? (
-                        <span className="flex items-center gap-2">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path className="check" d="M20 6L9 17L4 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          Submitted
-                        </span>
-                      ) : (
-                        'Submit Evaluation'
-                      )}
-                    </Button>
-                  </div>
-                </form>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full p-8 text-center text-slate-500">
-                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                  <Filter className="w-8 h-8 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-700 mb-2">No Lecturer Selected</h3>
-                <p className="max-w-md">Please select a lecturer from the list on the left to begin the evaluation process.</p>
-              </div>
+                    <div className="evaluation-grid">
+                      {evaluationCriteria.map((criterion) => (
+                        <div key={criterion.id} className="glass-card rounded-2xl elevation-card">
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
+                            <div>
+                              <p className="font-semibold text-slate-900 mb-2">{criterion.label}</p>
+                              <p className="text-sm text-slate-500 mb-4">{criterion.description}</p>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', paddingTop: '8px' }}>
+                              <RatingStars
+                                criterionId={criterion.id}
+                                currentRating={ratings[criterion.id] || 0}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
             )}
+                  <div className="space-y-3">
+                    <Label htmlFor="comments" className="text-base font-semibold text-slate-800">Additional Comments</Label>
+                    <Textarea
+                      id="comments"
+                      placeholder="What did this lecturer do well? What could be improved?"
+                      value={comments}
+                      onChange={(e) => setComments(e.target.value)}
+                      className="min-h-[140px] border-slate-300 focus:border-orange-500 focus:ring-orange-500 w-full"
+                    />
+                  </div>
+
+                  {/* Floating action bar (appears when all rated) */}
+                  {evaluationCriteria.every(c => ratings[c.id] > 0) && (
+                    <div className="fab-bar mt-4">
+                      <button type="submit" className="fab-button" disabled={submitted}>
+                        {submitted ? (
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path className="success-check" d="M20 6L9 17L4 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            Submitted
+                          </span>
+                        ) : (
+                          'Submit Evaluation'
+                        )}
+                      </button>
+                    </div>
+                  )}
           </Card>
         </div>
       </div>
