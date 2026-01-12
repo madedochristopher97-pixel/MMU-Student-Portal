@@ -255,28 +255,7 @@ export function LecturersEvaluationPage() {
                     />
                   </div>
 
-                  <div className="flex justify-end pt-4">
-                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 submit-eval-btn w-full sm:w-auto">
-                      {submitted ? (
-                    <div className="evaluation-grid">
-                      {evaluationCriteria.map((criterion) => (
-                        <div key={criterion.id} className="glass-card rounded-2xl elevation-card">
-                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                            <div>
-                              <p className="font-semibold text-slate-900 mb-2">{criterion.label}</p>
-                              <p className="text-sm text-slate-500 mb-4">{criterion.description}</p>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', paddingTop: '8px' }}>
-                              <RatingStars
-                                criterionId={criterion.id}
-                                currentRating={ratings[criterion.id] || 0}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-            )}
+                  
                   <div className="space-y-3">
                     <Label htmlFor="comments" className="text-base font-semibold text-slate-800">Additional Comments</Label>
                     <Textarea
@@ -305,6 +284,17 @@ export function LecturersEvaluationPage() {
                       </button>
                     </div>
                   )}
+                </form>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full p-8 text-center text-slate-500">
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                  <Filter className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-700 mb-2">No Lecturer Selected</h3>
+                <p className="max-w-md">Please select a lecturer from the list on the left to begin the evaluation process.</p>
+              </div>
+            )}
           </Card>
         </div>
       </div>
