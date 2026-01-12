@@ -251,6 +251,17 @@ h1, h2, h3, h4, h5, h6 {
   filter: drop-shadow(0 6px 10px rgba(246,192,45,0.18));
 }
 
+/* star hover glow */
+.star:hover, .star-btn:hover svg { filter: drop-shadow(0 8px 18px rgba(246,192,45,0.22)); }
+
+/* star pop animation on click */
+.star-pop { animation: star-pop 260ms cubic-bezier(.2,.9,.2,1) forwards; }
+@keyframes star-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
 /* particle burst */
 .particle {
   position: absolute;
@@ -277,3 +288,12 @@ h1, h2, h3, h4, h5, h6 {
   .eval-grid { grid-template-columns: 1fr !important; }
   .lecturer-list { max-height: 220px !important; }
 }
+
+/* Submit button refinement */
+.submit-eval-btn {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.05rem;
+  border-radius: 10px;
+  transition: box-shadow 160ms ease, transform 140ms ease;
+}
+.submit-eval-btn:hover { box-shadow: 0 10px 30px rgba(249,115,22,0.14); transform: translateY(-1px); }

@@ -65,7 +65,20 @@ export function LecturersEvaluationPage() {
 
   const handleRating = (criterionId: string, rating: number, ev?: React.MouseEvent) => {
     setRatings(prev => ({ ...prev, [criterionId]: rating }));
-    if (ev && containerRef.current) triggerParticle(ev.nativeEvent as MouseEvent, containerRef.current)
+    if (ev && containerRef.current) {
+      triggerParticle(ev.nativeEvent as MouseEvent, containerRef.current)
+      // add a quick pop animation to the clicked star svg
+      try {
+        const btn = ev.currentTarget as HTMLElement
+        const svg = btn.querySelector('svg')
+        if (svg) {
+          svg.classList.add('star-pop')
+          setTimeout(() => svg.classList.remove('star-pop'), 300)
+        }
+      } catch (e) {
+        // ignore if DOM not available
+      }
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -202,9 +215,9 @@ export function LecturersEvaluationPage() {
                 <form onSubmit={handleSubmit} className="p-6 space-y-8">
                     <div className="space-y-6">
                     <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
-                    <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {evaluationCriteria.map((criterion) => (
-                        <div key={criterion.id} className="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                        <div key={criterion.id} className="glass-card p-8 rounded-2xl border">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
                               <p className="font-semibold text-slate-900 mb-1">{criterion.label}</p>
@@ -232,12 +245,12 @@ export function LecturersEvaluationPage() {
                       placeholder="What did this lecturer do well? What could be improved?"
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
-                      className="min-h-[100px] border-slate-300 focus:border-orange-500 focus:ring-orange-500"
+                      className="min-h-[120px] border-slate-300 focus:border-orange-500 focus:ring-orange-500 w-full"
                     />
                   </div>
 
                   <div className="flex justify-end pt-4">
-                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 btn-comfort w-full sm:w-auto">
+                    <Button type="submit" size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 submit-eval-btn w-full sm:w-auto">
                       {submitted ? (
                         <span className="flex items-center gap-2">
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
