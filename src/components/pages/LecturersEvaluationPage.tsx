@@ -55,6 +55,13 @@ export function LecturersEvaluationPage() {
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [searchTerm, setSearchTerm] = useState('');
 
+  const [evaluatedSet, setEvaluatedSet] = useState<Set<number>>(() => {
+    try {
+      const raw = localStorage.getItem('evaluated_lecturers')
+      return raw ? new Set<number>(JSON.parse(raw)) : new Set()
+    } catch { return new Set() }
+  })
+
   const filteredLecturers = lecturersData.filter(l =>
     l.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     l.unit.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -97,6 +104,7 @@ export function LecturersEvaluationPage() {
 
     setSubmitted(true)
     setTimeout(() => {
+      if (selectedLecturer) markEvaluated(selectedLecturer.id)
       alert(`Evaluation submitted for ${selectedLecturer?.name}! Thank you for your feedback.`);
       setSubmitted(false)
       // Reset form
@@ -110,7 +118,9 @@ export function LecturersEvaluationPage() {
     const rect = container.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    for (let i = 0; i < 12; i++) {
+    const isTouch = typeof navigator !== 'undefined' && ('maxTouchPoints' in navigator) && (navigator.maxTouchPoints > 0)
+    const count = isTouch ? 8 : 12
+    for (let i = 0; i < count; i++) {
       const p = document.createElement('div')
       p.className = 'particle'
       const dx = (Math.random() - 0.5) * 180 + 'px'
@@ -128,6 +138,13 @@ export function LecturersEvaluationPage() {
     if (!name) return 'NA'
     const parts = name.split(' ')
     return (parts[0]?.[0] || '') + (parts[1]?.[0] || '')
+  }
+
+  function markEvaluated(id: number) {
+    const copy = new Set(evaluatedSet)
+    copy.add(id)
+    setEvaluatedSet(copy)
+    try { localStorage.setItem('evaluated_lecturers', JSON.stringify(Array.from(copy))) } catch {}
   }
 
   const RatingStars = ({ criterionId, currentRating }: { criterionId: string; currentRating: number }) => {
@@ -149,6 +166,15 @@ export function LecturersEvaluationPage() {
       </div>
     );
   };
+
+  function getMoodEmoji() {
+    const vals = Object.values(ratings)
+    if (vals.length === 0) return '😐'
+    const avg = vals.reduce((a,b)=>a+b,0)/vals.length
+    if (avg <= 2) return '☹️'
+    if (avg === 3) return '😐'
+    return '🤩'
+  }
 
   return (
     <div className="space-y-6" ref={containerRef}>
@@ -175,24 +201,32 @@ export function LecturersEvaluationPage() {
               </div>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {filteredLecturers.map((lecturer) => (
+              {filteredLecturers.map((lecturer) => {
+                const isSelected = selectedLecturerId === lecturer.id.toString()
+                const isDone = evaluatedSet.has(lecturer.id)
+                return (
                 <div
                   key={lecturer.id}
                   onClick={() => setSelectedLecturerId(lecturer.id.toString())}
-                  className={`p-4 rounded-lg cursor-pointer border transition-all ${selectedLecturerId === lecturer.id.toString()
-                      ? 'bg-orange-50 border-orange-200 shadow-sm'
-                      : 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200'
-                    }`}
+                  className={`lecturer-card p-4 rounded-lg cursor-pointer border transition-all ${isSelected ? 'selected' : ''} ${!isSelected ? 'bg-white border-transparent hover:bg-slate-50 hover:border-slate-200' : ''}`}
                 >
-                  <h4 className={`font-semibold text-sm ${selectedLecturerId === lecturer.id.toString() ? 'text-orange-700' : 'text-slate-800'}`}>
-                    {lecturer.name}
-                  </h4>
-                  <p className="text-xs text-slate-500 mb-1">{lecturer.unit}</p>
-                  <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5">
-                    {lecturer.faculty.split(' ').slice(0, 1)}...
-                  </Badge>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className={`font-semibold text-sm ${isSelected ? 'text-orange-700' : 'text-slate-800'}`}>
+                        {lecturer.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 mb-1">{lecturer.unit}</p>
+                    </div>
+                    {isDone && <div className="checkmark">✓</div>}
+                  </div>
+                  <div className="mt-2">
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5">
+                      {lecturer.faculty.split(' ').slice(0, 1)}...
+                    </Badge>
+                  </div>
                 </div>
-              ))}
+                )
+              })}
               {filteredLecturers.length === 0 && (
                 <p className="text-center text-slate-500 p-4 text-sm">No lecturers found.</p>
               )}
@@ -218,72 +252,72 @@ export function LecturersEvaluationPage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-8">
-                    <div className="space-y-6">
-                    <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
-                    <div className="criteria-grid grid grid-cols-1 gap-6">
-                      {evaluationCriteria.map((criterion) => (
-                        <div key={criterion.id} className="glass-card p-8 rounded-2xl border">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div>
-                              <p className="font-semibold text-slate-900 mb-1">{criterion.label}</p>
-                              <p className="text-sm text-slate-500">{criterion.description}</p>
+                <form onSubmit={handleSubmit} className="p-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Middle: Criteria (span 2 on large screens) */}
+                    <div className="lg:col-span-2">
+                      <div className="bg-gradient-to-r from-slate-50 to-slate-100 p-6 border-b border-slate-200">
+                        <div className="hero-card">
+                          <div className="hero-avatar">{getInitials(selectedLecturer.name)}</div>
+                          <div className="hero-details">
+                            <div className="flex items-center">
+                              <h2 className="text-2xl font-bold text-slate-900">{selectedLecturer.name}</h2>
+                              <span className="mood-emoji">{getMoodEmoji()}</span>
                             </div>
-                            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100">
-                              <RatingStars
-                                criterionId={criterion.id}
-                                currentRating={ratings[criterion.id] || 0}
-                              />
-                              <span className="text-sm font-bold text-slate-700 min-w-[32px] text-center">
-                                {ratings[criterion.id] || '-'}
-                              </span>
+                            <div className="flex items-center gap-3">
+                              <span className="hero-badge">{selectedLecturer.code}</span>
+                              <div className="text-sm text-slate-600">{selectedLecturer.unit}</div>
                             </div>
                           </div>
+                          <div style={{ marginLeft: 'auto' }}>
+                            <Badge className="bg-slate-800">{selectedLecturer.faculty}</Badge>
+                          </div>
                         </div>
-                      ))}
+                      </div>
+
+                      <div className="mt-6">
+                        <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
+                        <div className="evaluation-grid mt-4">
+                          {evaluationCriteria.map((criterion) => (
+                            <div key={criterion.id} className="glass-card rounded-2xl elevation-card" style={{padding:24}}>
+                              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '120px' }}>
+                                <div>
+                                  <p className="font-semibold text-slate-900 mb-2">{criterion.label}</p>
+                                  <p className="text-sm text-slate-500 mb-4">{criterion.description}</p>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', paddingTop: '8px' }}>
+                                  <RatingStars
+                                    criterionId={criterion.id}
+                                    currentRating={ratings[criterion.id] || 0}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: Summary panel */}
+                    <div className="lg:col-span-1">
+                      <div className="summary-panel">
+                        <h4 className="text-lg font-semibold mb-3">Additional Comments</h4>
+                        <Textarea
+                          id="comments"
+                          placeholder="What did this lecturer do well? What could be improved?"
+                          value={comments}
+                          onChange={(e) => setComments(e.target.value)}
+                          className="min-h-[220px] border-slate-300 focus:border-orange-500 focus:ring-orange-500 w-full"
+                        />
+
+                        <div className="mt-6">
+                          <button type="submit" className="fab-button w-full" disabled={submitted || !evaluationCriteria.every(c => ratings[c.id] > 0)}>
+                            {submitted ? 'Submitting...' : 'Submit Evaluation'}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="space-y-3">
-                    <Label htmlFor="comments" className="text-base font-semibold text-slate-800">Additional Comments</Label>
-                    <Textarea
-                      id="comments"
-                      placeholder="What did this lecturer do well? What could be improved?"
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      className="min-h-[120px] border-slate-300 focus:border-orange-500 focus:ring-orange-500 w-full"
-                    />
-                  </div>
-
-                  
-                  <div className="space-y-3">
-                    <Label htmlFor="comments" className="text-base font-semibold text-slate-800">Additional Comments</Label>
-                    <Textarea
-                      id="comments"
-                      placeholder="What did this lecturer do well? What could be improved?"
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      className="min-h-[140px] border-slate-300 focus:border-orange-500 focus:ring-orange-500 w-full"
-                    />
-                  </div>
-
-                  {/* Floating action bar (appears when all rated) */}
-                  {evaluationCriteria.every(c => ratings[c.id] > 0) && (
-                    <div className="fab-bar mt-4">
-                      <button type="submit" className="fab-button" disabled={submitted}>
-                        {submitted ? (
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path className="success-check" d="M20 6L9 17L4 12" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            Submitted
-                          </span>
-                        ) : (
-                          'Submit Evaluation'
-                        )}
-                      </button>
-                    </div>
-                  )}
                 </form>
               </>
             ) : (

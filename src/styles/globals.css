@@ -334,6 +334,26 @@ h1, h2, h3, h4, h5, h6 {
 .fab-bar { position: sticky; bottom:12px; background: linear-gradient(90deg,#fff,#fff); box-shadow: 0 20px 50px rgba(16,24,40,0.12); border-radius:12px; padding:12px; display:flex; justify-content:center; align-items:center; z-index:60; }
 .fab-button { background: linear-gradient(90deg,#fb923c,#f97316); color:white; padding:12px 24px; font-size:1.05rem; border-radius:10px; box-shadow: 0 8px 30px rgba(249,115,22,0.12); border:none; }
 .fab-button:disabled { opacity:0.6; transform:none; }
+.fab-button:hover { box-shadow: 0 14px 40px rgba(249,115,22,0.18); transform: translateY(-2px); }
+
+/* Sidebar glass and selection slide */
+.lecturer-deck { background: rgba(255,255,255,0.5); backdrop-filter: blur(6px) saturate(120%); border-radius:12px; padding:12px; }
+.lecturer-card { transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+.lecturer-card.selected { transform: translateX(8px); box-shadow: 0 12px 30px rgba(232,93,4,0.12); border: 1px solid rgba(234,88,12,0.25); }
+.lecturer-card .checkmark { background: linear-gradient(90deg,#10b981,#059669); color: white; padding:4px 6px; border-radius:999px; font-size:0.75rem; }
+
+/* Summary panel */
+.summary-panel { background:#fff; border-radius:12px; padding:20px; box-shadow: 0 12px 40px rgba(16,24,40,0.06); }
+
+/* Mood emoji */
+.mood-emoji { font-size:1.45rem; margin-left:8px; }
+
+/* Mobile touch optimization: reduce particles */
+@media (max-width: 768px) {
+  .evaluation-grid { grid-template-columns: 1fr; }
+  .hero-avatar { width:56px; height:56px; }
+  .fab-bar { position:fixed; left:12px; right:12px; bottom:12px; }
+}
 
 /* Success check animation stroke */
 .success-check { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 600ms ease forwards; }
