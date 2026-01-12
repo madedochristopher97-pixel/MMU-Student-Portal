@@ -176,6 +176,13 @@ export function LecturersEvaluationPage() {
     return '🤩'
   }
 
+  function getAverage(): number {
+    const vals = Object.values(ratings)
+    if (vals.length === 0) return 0
+    const avg = vals.reduce((a,b)=>a+b,0)/vals.length
+    return Math.round(avg * 10) / 10
+  }
+
   return (
     <div className="space-y-6" ref={containerRef}>
       {/* Page Header */}
@@ -187,7 +194,7 @@ export function LecturersEvaluationPage() {
       <div className="grid eval-main-grid grid-cols-1 gap-6">
         {/* Left Column: Lecturer List */}
         <div className="space-y-4">
-          <Card className="bg-white border-slate-200 shadow-md flex flex-col h-[600px]">
+          <Card className="lecturer-deck bg-white border-slate-200 shadow-md flex flex-col h-[600px]">
             <div className="p-4 border-b border-slate-200 bg-slate-50">
               <h3 className="font-semibold text-slate-800 mb-2">Select Lecturer</h3>
               <div className="relative">
@@ -301,6 +308,17 @@ export function LecturersEvaluationPage() {
                     {/* Right: Summary panel */}
                     <div className="lg:col-span-1">
                       <div className="summary-panel">
+                        <div className="summary-average mb-4">
+                          <div>
+                            <div className="average-score">{getAverage() > 0 ? getAverage() : '-'}</div>
+                            <div className="average-sub">Live Average</div>
+                          </div>
+                          <div style={{display:'flex', alignItems:'center', gap:8}}>
+                            {[1,2,3,4,5].map(i => (
+                              <Star key={i} className={`star ${i <= Math.round(getAverage()) ? 'star-on' : ''}`} />
+                            ))}
+                          </div>
+                        </div>
                         <h4 className="text-lg font-semibold mb-3">Additional Comments</h4>
                         <Textarea
                           id="comments"

@@ -309,6 +309,15 @@ h1, h2, h3, h4, h5, h6 {
 .star svg { width: 48px; height: 48px; }
 .glass-card { padding: 24px !important; }
 
+/* Tile hover lift for evaluation tiles */
+.elevation-card { background: #fff; transition: transform 220ms cubic-bezier(.2,.9,.2,1), box-shadow 220ms ease; will-change: transform; }
+.elevation-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(16,24,40,0.08); }
+
+/* Summary panel header for live average */
+.summary-average { display:flex; align-items:center; gap:12px; justify-content:space-between; }
+.average-score { font-size:1.6rem; font-weight:800; color:#1f2937; }
+.average-sub { color:#475569; font-size:0.95rem; }
+
 /* Hero lecturer card */
 .hero-card { display:flex; gap:16px; align-items:center; }
 .hero-avatar { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#f97316,#fb923c); color:white; font-weight:700; font-size:1.15rem; box-shadow: 0 8px 28px rgba(16,24,40,0.08); }
