@@ -243,22 +243,19 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   transition: transform 120ms ease, color 120ms ease, filter 120ms ease;
 }
-.star:hover { transform: scale(1.12); }
-.star-on {
-  background: linear-gradient(90deg,#FFD54A,#F6C02D);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 6px 10px rgba(246,192,45,0.18));
-}
+/* slight hover lift */
+.star:hover { transform: scale(1.08); }
+/* active gold star - solid gold with glow */
+.star-on { color: #FFD700; filter: drop-shadow(0 8px 20px rgba(255,174,0,0.22)); }
 
 /* star hover glow */
 .star:hover, .star-btn:hover svg { filter: drop-shadow(0 8px 18px rgba(246,192,45,0.22)); }
 
 /* star pop animation on click */
-.star-pop { animation: star-pop 260ms cubic-bezier(.2,.9,.2,1) forwards; }
+.star-pop { animation: star-pop 500ms cubic-bezier(.2,.9,.2,1) forwards; }
 @keyframes star-pop {
   0% { transform: scale(1); }
-  40% { transform: scale(1.25); }
+  40% { transform: scale(1.3); }
   100% { transform: scale(1); }
 }
 
@@ -271,10 +268,10 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50%;
   pointer-events: none;
   transform: translate(-50%, -50%) scale(0.6);
-  animation: particle-move 550ms ease-out forwards;
+  animation: particle-move 500ms ease-out forwards;
 }
 @keyframes particle-move {
-  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.85); }
   100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); }
 }
 
@@ -297,3 +294,17 @@ h1, h2, h3, h4, h5, h6 {
   transition: box-shadow 160ms ease, transform 140ms ease;
 }
 .submit-eval-btn:hover { box-shadow: 0 10px 30px rgba(249,115,22,0.14); transform: translateY(-1px); }
+
+/* Main evaluation layout: sidebar + big evaluation area */
+@media (min-width: 1024px) {
+  .eval-main-grid { display: grid; grid-template-columns: 24% 76%; gap: 1.5rem; align-items: start; }
+}
+
+/* Force 3-column horizontal grid for criteria on medium+ screens */
+@media (min-width: 768px) {
+  .criteria-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+}
+
+/* Larger star sizing and card padding */
+.star svg { width: 48px; height: 48px; }
+.glass-card { padding: 24px !important; }

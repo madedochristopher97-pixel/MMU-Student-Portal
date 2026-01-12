@@ -110,7 +110,7 @@ export function LecturersEvaluationPage() {
     const rect = container.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
       const p = document.createElement('div')
       p.className = 'particle'
       const dx = (Math.random() - 0.5) * 180 + 'px'
@@ -120,7 +120,7 @@ export function LecturersEvaluationPage() {
       p.style.setProperty('--dx', dx)
       p.style.setProperty('--dy', dy)
       container.appendChild(p)
-      setTimeout(() => { p.remove() }, 700)
+      setTimeout(() => { p.remove() }, 500)
     }
   }
 
@@ -136,7 +136,7 @@ export function LecturersEvaluationPage() {
             aria-label={`Rate ${star} stars`}
           >
             <Star
-              className={`w-8 h-8 star ${star <= currentRating ? 'star-on' : 'text-slate-200'}`}
+              className={`star ${star <= currentRating ? 'star-on' : ''}`}
             />
           </button>
         ))}
@@ -152,9 +152,9 @@ export function LecturersEvaluationPage() {
         <p className="text-lg text-slate-700">Evaluate your lecturers to help improve academic quality.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid eval-main-grid grid-cols-1 gap-6">
         {/* Left Column: Lecturer List */}
-        <div className="lg:col-span-1 space-y-4">
+        <div className="space-y-4">
           <Card className="bg-white border-slate-200 shadow-md flex flex-col h-[600px]">
             <div className="p-4 border-b border-slate-200 bg-slate-50">
               <h3 className="font-semibold text-slate-800 mb-2">Select Lecturer</h3>
@@ -195,7 +195,7 @@ export function LecturersEvaluationPage() {
         </div>
 
         {/* Right Column: Evaluation Form */}
-        <div className="lg:col-span-2">
+        <div>
           <Card className="bg-white border-slate-200 shadow-lg min-h-[600px]">
             {selectedLecturer ? (
               <>
@@ -215,7 +215,7 @@ export function LecturersEvaluationPage() {
                 <form onSubmit={handleSubmit} className="p-6 space-y-8">
                     <div className="space-y-6">
                     <h4 className="text-lg font-semibold text-slate-800 border-b border-slate-100 pb-2">Evaluation Criteria</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="criteria-grid grid grid-cols-1 gap-6">
                       {evaluationCriteria.map((criterion) => (
                         <div key={criterion.id} className="glass-card p-8 rounded-2xl border">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
