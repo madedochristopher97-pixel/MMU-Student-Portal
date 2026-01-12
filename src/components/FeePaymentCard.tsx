@@ -77,15 +77,16 @@ export function FeePaymentCard({ onNavigate }: FeePaymentCardProps) {
         <div className="space-y-2">
           <Button
             className={cn(
-              "w-full transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2",
+              "w-full transition-all hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 font-medium",
               hasCredit
                 ? "bg-green-600 hover:bg-green-700 focus:ring-green-500"
                 : "bg-orange-600 hover:bg-orange-700 focus:ring-orange-500"
             )}
             size="sm"
+            onClick={() => onNavigate?.('fee-structure')}
           >
             <CreditCard className="w-4 h-4 mr-2" />
-            {hasCredit ? "Already Paid" : "Make Payment"}
+            Pay Fee
           </Button>
 
           <div className="flex gap-2">
@@ -93,10 +94,10 @@ export function FeePaymentCard({ onNavigate }: FeePaymentCardProps) {
               variant="outline"
               size="sm"
               className="flex-1 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-              onClick={() => onNavigate?.('fee-statement')}
+              onClick={() => onNavigate?.('fee-structure')}
             >
               <FileText className="w-4 h-4 mr-2" />
-              Statements
+              Fee Structure
             </Button>
             <Button
               variant="outline"

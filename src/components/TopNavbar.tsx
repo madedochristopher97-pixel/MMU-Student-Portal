@@ -76,7 +76,9 @@ export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) 
             <Menu className="w-5 h-5 text-slate-600" />
           </Button>
           <h1 className="text-lg font-semibold text-slate-800 hidden md:block">{title}</h1>
-          <span className="text-lg font-semibold text-slate-800 md:hidden">MMU</span>
+          <div className="md:hidden">
+            <img src="/mmu-logo.png" alt="MMU" className="h-6 object-contain" />
+          </div>
         </div>
 
         {/* Center: Search (Optional, visually nice) */}
@@ -109,6 +111,9 @@ export function TopNavbar({ onMenuClick, title = "Dashboard" }: TopNavbarProps) 
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
+              <button onClick={handleAvatarClick} title="Quick edit image" className="absolute -bottom-1 -right-1 p-1 bg-white rounded-full shadow-md border border-slate-100">
+                <Camera className="w-3 h-3 text-slate-700" />
+              </button>
             </div>
           </div>
         </div>

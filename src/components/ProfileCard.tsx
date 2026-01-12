@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
-import { User, Mail, Phone, MapPin, Camera, Save, X, Edit2, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Phone, Camera, Save, X, Edit2, CheckCircle2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -20,9 +20,10 @@ export function ProfileCard() {
     name: 'Christopher Madido',
     admissionNo: 'SST-251-1**/2024',
     status: 'Active',
+    faculty: 'Faculty of Social Sciences and Technology',
+    year: 'Year 2, Semester 1',
     email: 'christopher.made@student.mmu.ac.ke',
     phone: '0792 123 456',
-    location: 'Nairobi, Kenya',
     image: null as string | null
   });
 
@@ -93,18 +94,15 @@ export function ProfileCard() {
               <Avatar className="w-32 h-32 border-4 border-white shadow-lg mb-4">
                 <AvatarImage src={isEditing ? editForm.image || "" : info.image || ""} objectFit='cover' />
                 <AvatarFallback className="bg-orange-600 text-white text-3xl font-light">
-                  {info.name.split(' ').map(n => n[0]).join('')}
+                  {(isEditing ? editForm.name : info.name).split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
-
-              {isEditing && (
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  className="absolute top-2 right-2 p-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 shadow-lg transition-all"
-                >
-                  <Camera className="w-4 h-4" />
-                </button>
-              )}
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="absolute top-2 right-2 p-2 bg-slate-800 text-white rounded-full hover:bg-slate-700 shadow-lg transition-all"
+              >
+                <Camera className="w-4 h-4" />
+              </button>
               <input
                 type="file"
                 ref={fileInputRef}
@@ -113,8 +111,7 @@ export function ProfileCard() {
                 onChange={handleImageUpload}
               />
             </div>
-
-            <div className="text-center">
+            <div className="text-center w-full px-4 mt-2">
               {isEditing ? (
                 <>
                   <Input
@@ -127,11 +124,23 @@ export function ProfileCard() {
                     onChange={(e) => setEditForm({ ...editForm, admissionNo: e.target.value })}
                     className="text-center text-sm mb-2 h-9 bg-white"
                   />
+                  <Input
+                    value={editForm.faculty}
+                    onChange={(e) => setEditForm({ ...editForm, faculty: e.target.value })}
+                    className="text-center text-sm mb-2 h-9 bg-white"
+                  />
+                  <Input
+                    value={editForm.year}
+                    onChange={(e) => setEditForm({ ...editForm, year: e.target.value })}
+                    className="text-center text-sm mb-2 h-9 bg-white"
+                  />
                 </>
               ) : (
                 <>
-                  <h2 className="text-xl font-bold text-slate-900 mb-1">{info.name}</h2>
-                  <p className="text-sm text-slate-500 font-mono mb-2">{info.admissionNo}</p>
+                  <h2 className="text-xl font-bold text-slate-900 mb-1 bg-white rounded-lg py-2 px-4 inline-block">{info.name}</h2>
+                  <p className="text-sm text-slate-500 font-mono mb-2 bg-white rounded-lg py-2 px-4 inline-block mt-2">{info.admissionNo}</p>
+                  <p className="text-sm text-slate-700 mb-1 mt-2">{info.faculty}</p>
+                  <p className="text-sm text-slate-500 mb-2">{info.year}</p>
                 </>
               )}
               <Badge variant={info.status === 'Active' ? 'default' : 'secondary'} className={`${info.status === 'Active' ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-slate-100 text-slate-700'}`}>
@@ -167,24 +176,6 @@ export function ProfileCard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Email Updates</Label>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                      <Mail className="w-4 h-4 text-blue-600" />
-                    </div>
-                    {isEditing ? (
-                      <Input
-                        value={editForm.email}
-                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                        className="bg-slate-50/50"
-                      />
-                    ) : (
-                      <span className="text-slate-700 font-medium">{info.email}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
                   <Label className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Phone Number</Label>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center shrink-0">
@@ -201,27 +192,27 @@ export function ProfileCard() {
                     )}
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Current Location</Label>
+                  <Label className="text-xs text-slate-400 uppercase tracking-wider font-semibold">Email Updates</Label>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4 text-purple-600" />
+                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                      <Mail className="w-4 h-4 text-blue-600" />
                     </div>
                     {isEditing ? (
                       <Input
-                        value={editForm.location}
-                        onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
+                        value={editForm.email}
+                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
                         className="bg-slate-50/50"
                       />
                     ) : (
-                      <span className="text-slate-700 font-medium">{info.location}</span>
+                      <span className="text-slate-700 font-medium">{info.email}</span>
                     )}
                   </div>
                 </div>
+              </div>
 
+              <div className="space-y-4">
                 <div className="pt-2">
                   {!isEditing && (
                     <div className="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-100">
